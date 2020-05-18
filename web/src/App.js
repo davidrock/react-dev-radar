@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Button,
@@ -10,12 +10,21 @@ import {
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import api from "./services/api";
 
 function App() {
+  const [github_username, setGithubUsername] = useState("");
+  const [techs, setTechs] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         console.log(pos);
+        const { latitude, longitude } = pos.coords;
+        setLatitude(latitude);
+        setLongitude(longitude);
       },
       (err) => {
         console.error(err);
@@ -26,8 +35,21 @@ function App() {
     );
   }, []);
 
+  async function handleSubmit(e) {
+    console.log("handlee");
+    e.preventDefault();
+    const res = await api.post("/devs", {
+      github_username,
+      techs,
+      latitude,
+      longitude,
+    });
+
+    console.log(res.data);
+  }
+
   return (
-    <>
+    <div id="app">
       <aside>
         <Card style={{ width: "18rem" }}>
           <Card.Body>
@@ -36,41 +58,63 @@ function App() {
                 <Col>Register</Col>
               </Row>
             </Card.Title>
-            <Card.Text>
-              <Form>
-                
+            <Form noValidate onSubmit={handleSubmit}>
+              <Row>
+                <Col>
+                  <Form.Group controlId="formGithubUser">
+                    <Form.Label>Github User</Form.Label>
+                    <Form.Control
+                      type="github-user"
+                      placeholder="Insert your github's name"
+                      value={github_username}
+                      onChange={(e) => setGithubUsername(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-                <Row>
-                  <Col>
-                    <Form.Group controlId="formTechStack">
-                      <Form.Label>Tech Stack</Form.Label>
-                      <Form.Control
-                        type="tech-stack"
-                        placeholder="What technologies do you use?"
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="formTechStack">
+                    <Form.Label>Tech Stack</Form.Label>
+                    <Form.Control
+                      type="tech-stack"
+                      placeholder="What technologies do you use?"
+                      value={techs}
+                      onChange={(e) => setTechs(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-                <Row>
-                  <Col>
-                    <Form.Group controlId="formLat">
-                      <Form.Label>Latitude</Form.Label>
-                      <Form.Control type="latitude" />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group controlId="formLon">
-                      <Form.Label>Longitude</Form.Label>
-                      <Form.Control type="longitude" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Form>
-            </Card.Text>
-            <Card.Link href="#">
-              <Button block>Salvar</Button>
-            </Card.Link>
+              <Row>
+                <Col>
+                  <Form.Group controlId="formLat">
+                    <Form.Label>Latitude</Form.Label>
+                    <Form.Control
+                      type="latitude"
+                      value={latitude}
+                      onChange={(e) => setLatitude(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="formLon">
+                    <Form.Label>Longitude</Form.Label>
+                    <Form.Control
+                      type="longitude"
+                      value={longitude}
+                      onChange={(e) => setLongitude(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Card.Link href="#">
+                <Button block type="submit">
+                  Salvar
+                </Button>
+              </Card.Link>
+            </Form>
           </Card.Body>
         </Card>
       </aside>
@@ -164,7 +208,7 @@ function App() {
           </Card>
         </CardColumns>
       </main>
-    </>
+    </div>
   );
 }
 

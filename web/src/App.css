@@ -6,3 +6,13 @@
   font-size: small;
   color: rgb(71, 71, 71);
 }
+
+#app {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+}
+
+aside{
+    margin-right: 40px;
+}
