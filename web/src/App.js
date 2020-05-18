@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   Button,
@@ -12,8 +12,22 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 function App() {
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        console.log(pos);
+      },
+      (err) => {
+        console.error(err);
+      },
+      {
+        timeout: 30000,
+      }
+    );
+  }, []);
+
   return (
-    <div>
+    <>
       <aside>
         <Card style={{ width: "18rem" }}>
           <Card.Body>
@@ -24,17 +38,7 @@ function App() {
             </Card.Title>
             <Card.Text>
               <Form>
-                <Row>
-                  <Col>
-                    <Form.Group controlId="formGithubUser">
-                      <Form.Label>Github User</Form.Label>
-                      <Form.Control
-                        type="github-user"
-                        placeholder="Insert your github's name"
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+                
 
                 <Row>
                   <Col>
@@ -99,11 +103,11 @@ function App() {
               </Row>
               <Row>
                 <Col>
-                  <p>
+                  <span>
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s, when an unknown
-                  </p>
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -142,11 +146,11 @@ function App() {
               </Row>
               <Row>
                 <Col>
-                  <p>
+                  <span>
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s, when an unknown
-                  </p>
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -160,7 +164,7 @@ function App() {
           </Card>
         </CardColumns>
       </main>
-    </div>
+    </>
   );
 }
 
