@@ -1,13 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./routes");
+const cors = require('cors');
 
 const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://rochasdv:4815926@curso-qo1a9.gcp.mongodb.net/dev-radar?retryWrites=true&w=majority",
-// "mongodb://nexidea:Asd48159263@nexidea-shard-00-00-9vctd.mongodb.net:27017,nexidea-shard-00-01-9vctd.mongodb.net:27017,nexidea-shard-00-02-9vctd.mongodb.net:27017/test?ssl=true&replicaSet=nexidea-shard-0&authSource=admin&retryWrites=true&w=majority"
+    // "mongodb+srv://rochasdv:4815926@curso-qo1a9.gcp.mongodb.net/dev-radar?retryWrites=true&w=majority",
+    "mongodb://root:devradar@localhost:27017/?authSource=admin&readPreference=primary&ssl=false",
    {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -17,6 +18,7 @@ mongoose
     console.log(err);
   });
 
+
 // mongoose.connect(
 //   "mongodb+srv://nexidea:Asd48159263@nexidea-9vctd.mongodb.net/dev-radar?retryWrites=true&w=majority",
 //   {
@@ -25,7 +27,9 @@ mongoose
 //   }
 // );
 
+app.use(cors());
 app.use(express.json());
 app.use(routes);
+
 
 app.listen(3333);
